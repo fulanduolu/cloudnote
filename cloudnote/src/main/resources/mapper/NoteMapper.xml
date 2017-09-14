@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+ <mapper namespace="com.tedu.cloudnote.dao.NoteDAO">
+ 
+ 	<select id="findByBookId" parameterType="string" resultType="map">
+ 	select cn_note_id,cn_note_title,cn_note_type_id from cn_note where cn_notebook_id=#{bookId} and cn_note_status_id='1'
+ 	</select>
+ 
+ 	<select id="findById" parameterType="string" resultType="com.tedu.cloudnote.entity.Note">
+ 		select * from cn_note where cn_note_id=#{id}
+ 	</select>
+ 	
+ 	<update id="updateNote" parameterType="com.tedu.cloudnote.entity.Note">
+ 		update cn_note 
+ 		set cn_note_title=#{cn_note_title},
+ 			cn_note_body=#{cn_note_body},
+ 			cn_note_last_modify_time=#{cn_note_last_modify_time}
+ 		where cn_note_id=#{cn_note_id} 
+ 	</update>
+ 	<insert id="save" parameterType="com.tedu.cloudnote.entity.Note">
+ 		insert into cn_note(cn_note_id,cn_notebook_id,cn_user_id,cn_note_status_id,cn_note_type_id,cn_note_title,
+ 		cn_note_body,cn_note_create_time,cn_note_last_modify_time) values(#{cn_note_id},#{cn_notebook_id},#{cn_user_id},'1','1',#{cn_note_title},'',#{cn_note_create_time},#{cn_note_last_modify_time})
+ 	</insert>
+ 	<update id="updateStatus" parameterType="string">
+ 		update cn_note set cn_note_status_id='2' where cn_note_id=#{noteId}
+ 	</update>
+ 	<update id="updateBookId" parameterType="com.tedu.cloudnote.entity.Note">
+ 		update cn_note set cn_notebook_id=#{cn_notebook_id} where cn_note_id=#{cn_note_id}
+ 	</update>
+ 	<update id="updateType" parameterType="string">
+ 		update cn_note set cn_note_type_id='2' where cn_note_id=#{cn_note_id}
+ 	</update>
+ 	<select id="findTrashById" parameterType="string" resultType="com.tedu.cloudnote.entity.Note">
+ 		select * from cn_note where cn_user_id=#{cn_user_id} and cn_note_status_id='2'
+ 	</select>
+	<select id="findByIdAndTypeId" parameterType="com.tedu.cloudnote.entity.Note" resultType="com.tedu.cloudnote.entity.Note">
+		select * from cn_note where cn_user_id=#{cn_user_id} and cn_note_type_id='3' and cn_note_title=#{cn_note_title}
+	</select>
+ 	<insert id="insertLike" parameterType="com.tedu.cloudnote.entity.Note">
+ 	insert into cn_note(cn_note_id,cn_notebook_id,cn_user_id,cn_note_status_id,cn_note_type_id,cn_note_title,
+ 		cn_note_body,cn_note_create_time,cn_note_last_modify_time) values(#{cn_note_id},#{cn_notebook_id},#{cn_user_id},#{cn_note_status_id},'3',#{cn_note_title},#{cn_note_body},#{cn_note_create_time},#{cn_note_last_modify_time})
+ 	</insert>
+ 	<select id="findByLike" parameterType="string" resultType="com.tedu.cloudnote.entity.Note">
+ 		select * from cn_note where cn_user_id=#{cn_user_id} and cn_note_type_id='3'
+ 	</select>
+ 	<delete id="deleteById" parameterType="com.tedu.cloudnote.entity.Note">
+ 		delete from cn_note where cn_user_id=#{cn_user_id} and cn_note_type_id='3' and cn_note_id=#{cn_note_id}
+ 	</delete>
+ </mapper>
